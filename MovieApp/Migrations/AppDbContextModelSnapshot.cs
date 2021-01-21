@@ -21,19 +21,15 @@ namespace MovieApp.Migrations
 
             modelBuilder.Entity("MovieApp.Models.Entities.Actor", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
@@ -42,8 +38,14 @@ namespace MovieApp.Migrations
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -52,20 +54,22 @@ namespace MovieApp.Migrations
 
             modelBuilder.Entity("MovieApp.Models.Entities.Genre", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -74,16 +78,12 @@ namespace MovieApp.Migrations
 
             modelBuilder.Entity("MovieApp.Models.Entities.Movie", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -92,8 +92,14 @@ namespace MovieApp.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ProductionId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MoviePremierId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductionId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
@@ -104,7 +110,13 @@ namespace MovieApp.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MoviePremierId")
+                        .IsUnique();
 
                     b.HasIndex("ProductionId");
 
@@ -113,17 +125,29 @@ namespace MovieApp.Migrations
 
             modelBuilder.Entity("MovieApp.Models.Entities.MovieCast", b =>
                 {
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ActorId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ActorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("Revenue")
                         .HasColumnType("int");
 
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("MovieId", "ActorId");
 
@@ -134,11 +158,23 @@ namespace MovieApp.Migrations
 
             modelBuilder.Entity("MovieApp.Models.Entities.MovieGenre", b =>
                 {
-                    b.Property<Guid>("MovieId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("GenreId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("MovieId", "GenreId");
 
@@ -147,30 +183,95 @@ namespace MovieApp.Migrations
                     b.ToTable("MovieGenres");
                 });
 
+            modelBuilder.Entity("MovieApp.Models.Entities.MoviePremier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("premierDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("premierLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MoviePremiers");
+                });
+
             modelBuilder.Entity("MovieApp.Models.Entities.Production", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("DateCreated")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime>("CreateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateModified")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("Productions");
                 });
 
+            modelBuilder.Entity("MovieApp.Models.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("MovieApp.Models.Entities.Movie", b =>
                 {
+                    b.HasOne("MovieApp.Models.Entities.MoviePremier", "MoviePremier")
+                        .WithOne("Movie")
+                        .HasForeignKey("MovieApp.Models.Entities.Movie", "MoviePremierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MovieApp.Models.Entities.Production", "Production")
                         .WithMany("MovieList")
                         .HasForeignKey("ProductionId")

@@ -1,0 +1,54 @@
+<h1>Add new movie</h1>
+<div class="container">
+
+  <div class="opt">
+    <div class="form-container">
+
+      <form class="text-center " [formGroup]="addMovieForm">
+
+        <input type="text" class="form-control mb-4" placeholder="Title" formControlName="title" />
+        <input type="text" class="form-control mb-4" placeholder="Description" formControlName="description" />
+        <input type="number" class="form-control mb-4" placeholder="Duration" formControlName="duration" />
+        <input type="date" class="form-control mb-4" placeholder="Release Date" formControlName="releaseDate" />
+
+        <label> Premier information</label>
+
+        <input type="date" class="form-control mb-4" placeholder="Premier Date" formControlName="premierDate" />
+        <input type="text" class="form-control mb-4" placeholder="Premier Location" formControlName="premierLocation" />
+
+        <label> Cast information </label>
+
+        <select multiple class="browser-default custom-select form-control mb-4 " formControlName="actorIds" id="id">
+          
+          <option *ngFor="let actor of actors" [value]="actor.id">
+            {{actor.firstName}} {{actor.lastName}}
+          </option>
+        </select>
+
+        <label> Production information </label>
+
+        <select class="browser-default custom-select form-control mb-4 " formControlName="productionId" id="id">
+          <option selected value="-1">Select Movie Production</option>
+          <option *ngFor="let production of productions" [value]="production.id">
+            {{production.name}}
+          </option>
+        </select>
+
+        <label> Genre information </label>
+
+        <select multiple class="browser-default custom-select form-control mb-4 " formControlName="genreIds" id="id">
+          
+          <option *ngFor="let genre of genres" [value]="genre.id">
+            {{genre.type}}
+          </option>
+        </select>
+      </form>
+
+    </div>
+
+    <button mdbBtn color="danger" block="true" type="submit" (click)="add()">Add</button>
+    <p *ngIf="success" style="color: green; font-size: 22px;">Movie added successfully</p>
+    <p *ngIf="success === false" style="color: red; font-size: 22px;">Something went wrong, please try again</p>
+  </div>
+</div>
+

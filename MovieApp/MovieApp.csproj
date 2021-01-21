@@ -21,13 +21,29 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\NewFolder\**" />
+    <Compile Remove="ClientApp\src\app\authentication\register\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\NewFolder\**" />
+    <Content Remove="ClientApp\src\app\authentication\register\**" />
+    <EmbeddedResource Remove="ClientApp\NewFolder\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\authentication\register\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\NewFolder\**" />
+    <None Remove="ClientApp\src\app\authentication\register\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20210103151822_InitialCreate.cs" />
+    <Compile Remove="Migrations\20210103151822_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20210103152105_AddedEnt4.cs" />
+    <Compile Remove="Migrations\20210103152105_AddedEnt4.Designer.cs" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

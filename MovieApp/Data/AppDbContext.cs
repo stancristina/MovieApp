@@ -5,6 +5,9 @@ namespace MovieApp
 {
     public class AppDbContext : DbContext
     {
+        /* One-to-many relation*/
+        public DbSet<Production> Productions { get; set; }
+
         /* Many-to-many relations */
         public DbSet<Movie> Movies { get; set; }
 
@@ -16,8 +19,10 @@ namespace MovieApp
 
         public DbSet<MovieGenre> MovieGenres { get; set; }
 
-        /* One-to-many relation*/
-        public DbSet<Production> Productions { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        /* One-to-one relation */
+        public DbSet<MoviePremier> MoviePremiers { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -26,6 +31,13 @@ namespace MovieApp
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            /* One to One */
+            builder.Entity<MoviePremier>()
+                .HasOne(x => x.Movie)
+                .WithOne(y => y.MoviePremier)
+                .HasForeignKey<Movie>
+                (z => z.MoviePremierId);
+
             /* One-to-many relation*/
             builder.Entity<Production>()
                 .HasMany(x => x.MovieList)

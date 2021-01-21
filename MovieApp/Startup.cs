@@ -5,6 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MovieApp.Controllers;
+using MovieApp.Helpers;
+using MovieApp.IRepositories;
+using MovieApp.IServices;
+using MovieApp.Repositories;
+using MovieApp.Services;
 
 namespace MovieApp
 {
@@ -20,14 +26,34 @@ namespace MovieApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUserService, UserService>();
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IActorRepository, ActorRepository>();
+            services.AddTransient<IMovieRepository, MovieRepository>();
+            services.AddTransient<IGenreRepository, GenreRepository>();
+            services.AddTransient<IProductionRepository, ProductionRepository>();
+            services.AddTransient<IMoviePremierRepository, MoviePremierRepository>();
+            services.AddTransient<IMovieCastRepository, MovieCastRepository>();
+            services.AddTransient<IMovieGenreRepository, MovieGenreRepository>();
+
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IActorService, ActorService>();
+            services.AddTransient<IMovieService, MovieService>();
+            services.AddTransient<IGenreService, GenreService>();
+            services.AddTransient<IProductionService, ProductionService>();
+            services.AddTransient<IMoviePremierService, MoviePremierService>();
+            services.AddTransient<IMovieCastService, MovieCastService>();
+            services.AddTransient<IMovieGenreService, MovieGenreService>();
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -51,6 +77,12 @@ namespace MovieApp
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            // custom jwt auth middleware
+            app.UseMiddleware<JwtMiddleware>();
+
 
             app.UseEndpoints(endpoints =>
             {
